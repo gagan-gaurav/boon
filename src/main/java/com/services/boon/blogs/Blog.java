@@ -28,5 +28,6 @@ public class Blog {
 
     private String title;
 
+    @Column(columnDefinition = "text")
     private String content;
 }

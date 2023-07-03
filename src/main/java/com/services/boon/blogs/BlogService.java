@@ -16,7 +16,7 @@ public class BlogService {
     private final UserRepository userRepository;
 
     public void createBlog(BlogRequest request){
-        var user = userRepository.findByEmail(request.getUsername())
+        var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
         var blog = Blog.builder()
                 .user(user)
@@ -28,7 +28,7 @@ public class BlogService {
     }
 
     public List<BlogProjection> getBlogs(String username){
-        var user = userRepository.findByEmail(username)
+        var user = userRepository.findByUsername(username)
                 .orElseThrow();
         List<BlogProjection> blogs = blogRepository.findByUser(user);
         return blogs;

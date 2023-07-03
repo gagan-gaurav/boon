@@ -10,6 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -18,9 +20,16 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if(userRepository.findByUsername(request.getUsername()).isPresent()) {
+            return AuthenticationResponse.builder().usernameCollision(Boolean.TRUE).build();
+        }else if(userRepository.findByEmail(request.getEmail()).isPresent()) {
+            return AuthenticationResponse.builder().emailCollision(Boolean.TRUE).build();
+        }
         var user = User.builder()
+                .username(request.getUsername())
                 .firstname(request.getFirstname())
                 .lastname(request.getLastname())
                 .email(request.getEmail())
@@ -31,21 +40,26 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .username(user.getUsername())
+                .userCreated(Boolean.TRUE)
+                .isAuthenticated(Boolean.TRUE)
                 .build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request){
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmail(),
+                        request.getUsername(),
                         request.getPassword()
                 )
         );
-        var user = repository.findByEmail(request.getEmail())
+        var user = repository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .username(user.getUsername())
+                .isAuthenticated(Boolean.TRUE)
                 .build();
     }
 }

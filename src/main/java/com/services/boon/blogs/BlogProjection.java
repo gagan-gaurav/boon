@@ -6,4 +6,6 @@ public interface BlogProjection {
     String getTitle();
     String getContent();
     Date getCreatedAt();
+    String getFirstname();
+    String getLastname();
 }

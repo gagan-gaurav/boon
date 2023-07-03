@@ -11,4 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthenticationResponse {
     private String token;
+    private String username;
+    private Boolean userCreated;
+    private Boolean isAuthenticated;
+    private Boolean emailCollision;
+    private Boolean usernameCollision;
 }

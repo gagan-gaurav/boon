@@ -34,5 +34,5 @@ public class BlogController {
         return ResponseEntity.ok(blogService.getAllBlogs());
     }
 
-    //Add pagination support here. 
+    //Add pagination support here.
 }
