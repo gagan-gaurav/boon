@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BlogRequest {
-    private String username;
     private String title;
     private String content;
 }

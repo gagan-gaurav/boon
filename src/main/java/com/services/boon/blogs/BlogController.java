@@ -9,27 +9,27 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/blogs")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class BlogController {
 
     private final BlogService blogService;
 
-    @PostMapping()
-    ResponseEntity<Map<String, Object>> postBlogs(@RequestBody BlogRequest request) {
-        blogService.createBlog(request);
+    @PostMapping("/secured/blog")
+    ResponseEntity<Map<String, Object>> postBlogs(@RequestHeader("Authorization") String token, @RequestBody BlogRequest request) {
+        blogService.createBlog(token, request);
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Blogs is added to the database");
         response.put("status", "success");
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/public/blog/{userId}")
     ResponseEntity<List<BlogProjection>> getBlogs(@PathVariable("userId") String username){
         return ResponseEntity.ok(blogService.getBlogs(username));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/public/blog/all")
     ResponseEntity<List<BlogProjection>> getAllBlogs(){
         return ResponseEntity.ok(blogService.getAllBlogs());
     }

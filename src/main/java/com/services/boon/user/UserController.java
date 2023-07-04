@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserDetailsService userDetailsService;
-    @GetMapping("/{username}")
+    @GetMapping("/public/user/{username}")
     ResponseEntity<UserDetails> getUser(@PathVariable String username){
         var user = userDetailsService.loadUserByUsername(username);
         return ResponseEntity.ok(user);
