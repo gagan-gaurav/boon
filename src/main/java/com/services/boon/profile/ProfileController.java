@@ -14,7 +14,7 @@ import java.util.Optional;
 public class ProfileController {
     private final ProfileService profileService;
     @GetMapping("/public/profile/{username}")
-    ResponseEntity<ProfileProjection> getProfile(@PathVariable String username){
+    ResponseEntity<ProfileProjection> getProfile(@PathVariable("username") String username){
         return ResponseEntity.ok(profileService.getUserProfile(username));
     }
 

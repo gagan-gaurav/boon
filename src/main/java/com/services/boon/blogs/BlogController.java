@@ -24,8 +24,8 @@ public class BlogController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/public/blogs/{userId}")
-    ResponseEntity<List<BlogProjection>> getBlogs(@PathVariable("userId") String username){
+    @GetMapping("/public/blogs/{username}")
+    ResponseEntity<List<BlogProjection>> getBlogs(@PathVariable("username") String username){
         return ResponseEntity.ok(blogService.getBlogs(username));
     }
 

@@ -1,6 +1,8 @@
 package com.services.boon.auth;
 
 import com.services.boon.config.JwtService;
+import com.services.boon.profile.Profile;
+import com.services.boon.profile.ProfileRepository;
 import com.services.boon.user.Role;
 import com.services.boon.user.User;
 import com.services.boon.user.UserRepository;
@@ -16,11 +18,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
 
     public AuthenticationResponse register(RegisterRequest request) {
         if(userRepository.findByUsername(request.getUsername()).isPresent()) {
@@ -36,7 +38,13 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        repository.save(user);
+        userRepository.save(user);
+
+        var profile = Profile.builder()
+                .user(user)
+                .build();
+        profileRepository.save(profile);
+
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -53,7 +61,7 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = repository.findByUsername(request.getUsername())
+        var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()

@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProfileRequest {
-    String description;
-    String resume;
-    Boolean showResume;
-    String linkedin;
-    Boolean showLinkedin;
-    String github;
-    Boolean showGithub;
-    String gmail;
-    Boolean showGmail;
+    private String description;
+    private String resume;
+    private Boolean showResume;
+    private String linkedin;
+    private Boolean showLinkedin;
+    private String github;
+    private Boolean showGithub;
+    private String gmail;
+    private Boolean showGmail;
 }

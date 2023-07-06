@@ -29,29 +29,29 @@ public class ProfileService {
         var profile = profileRepository.findByUser(user);
         if(profile.isPresent()){
             Profile previousProfile = profile.get();
-            previousProfile.setDescription(request.description)
-                    .setLinkedin(request.linkedin)
-                    .setShowLinkedin(request.showLinkedin)
-                    .setGithub(request.github)
-                    .setShowGithub(request.showGithub)
-                    .setResume(request.resume)
-                    .setShowResume(request.showResume)
-                    .setGmail(request.gmail)
-                    .setShowGmail(request.showGmail);
+            previousProfile.setDescription(request.getDescription())
+                    .setLinkedin(request.getLinkedin())
+                    .setShowLinkedin(request.getShowLinkedin())
+                    .setGithub(request.getGithub())
+                    .setShowGithub(request.getShowGithub())
+                    .setResume(request.getResume())
+                    .setShowResume(request.getShowResume())
+                    .setGmail(request.getGmail())
+                    .setShowGmail(request.getShowGmail());
             profileRepository.save(previousProfile);
             return;
         }
         var newProfile = Profile.builder()
                 .user(user)
-                .description(request.description)
-                .resume(request.resume)
-                .showResume(request.showResume)
-                .linkedin(request.linkedin)
-                .showLinkedin(request.showLinkedin)
-                .github(request.github)
-                .showGithub(request.showGithub)
-                .gmail(request.gmail)
-                .showGmail(request.showGmail)
+                .description(request.getDescription())
+                .resume(request.getResume())
+                .showResume(request.getShowResume())
+                .linkedin(request.getLinkedin())
+                .showLinkedin(request.getShowLinkedin())
+                .github(request.getGithub())
+                .showGithub(request.getShowGithub())
+                .gmail(request.getGmail())
+                .showGmail(request.getShowGmail())
                 .build();
 
         profileRepository.save(newProfile);
