@@ -19,9 +19,14 @@ public class ProjectService {
 
     public void createProject(String token, ProjectRequest request){
         String jwt = token.substring(7);
-        User user = userRepository.findByUsername(jwtService.extractUsername(jwt)).get();
+        System.out.println(jwtService.extractUsername(jwt));
+        var user = userRepository.findByUsername(jwtService.extractUsername(jwt));
+        if(!user.isPresent()) {
+            System.out.println("No user present");
+            return;
+        }
         var project = Project.builder()
-                .user(user)
+                .user(user.get())
                 .showProject(request.getShowProject())
                 .title(request.getTitle())
                 .description(request.getDescription())

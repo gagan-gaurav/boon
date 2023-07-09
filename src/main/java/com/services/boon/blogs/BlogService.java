@@ -19,9 +19,13 @@ public class BlogService {
 
     public void createBlog(String token, BlogRequest request){
         String jwt = token.substring(7);
-        var user = userRepository.findByUsername(jwtService.extractUsername(jwt)).get();
+        var user = userRepository.findByUsername(jwtService.extractUsername(jwt));
+        if(!user.isPresent()) {
+            System.out.println("No user present with this jwt.");
+            return;
+        }
         var blog = Blog.builder()
-                .user(user)
+                .user(user.get())
                 .title(request.getTitle())
                 .content(request.getContent())
                 .createdAt(new Date())
@@ -30,9 +34,9 @@ public class BlogService {
     }
 
     public List<BlogProjection> getBlogs(String username){
-        var user = userRepository.findByUsername(username)
-                .orElseThrow();
-        List<BlogProjection> blogs = blogRepository.findByUser(user);
+        var user = userRepository.findByUsername(username);
+        if(!user.isPresent()) new ArrayList<BlogProjection>();
+        List<BlogProjection> blogs = blogRepository.findByUser(user.get());
         return blogs;
     }
 

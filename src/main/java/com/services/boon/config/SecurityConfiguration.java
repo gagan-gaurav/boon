@@ -1,5 +1,7 @@
 package com.services.boon.config;
-
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +27,8 @@ public class SecurityConfiguration {
         http
                 .csrf()
                 .disable()
+                .cors()
+                .and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/public/**")
                 .permitAll()
@@ -47,10 +51,10 @@ public class SecurityConfiguration {
             public void addCorsMappings(CorsRegistry registry) {
                 WebMvcConfigurer.super.addCorsMappings(registry);
                 registry.addMapping("/api/v1/**")
-                        .allowedOrigins("http://localhost:6006", "http://localhost:4200")
-                        .allowedMethods("GET", "POST", "OPTIONS")
-                        .allowedHeaders("Origin", "Content-Type", "Accept", "Authorization")
-                        .allowCredentials(true);
+                        .allowedOrigins("http://localhost:6006", "http://localhost:4200");
+//                        .allowedMethods("GET", "POST", "OPTIONS")
+//                        .allowedHeaders("Origin", "Content-Type", "Accept", "Authorization")
+//                        .allowCredentials(true);
             }
         };
     }
