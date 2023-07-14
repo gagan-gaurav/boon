@@ -25,13 +25,13 @@ public class BlogController {
     }
 
     @GetMapping("/public/blogs/{username}")
-    ResponseEntity<List<BlogProjection>> getBlogs(@PathVariable("username") String username){
-        return ResponseEntity.ok(blogService.getBlogs(username));
+    ResponseEntity<List<BlogProjection>> getBlogs(@RequestHeader(value = "Authorization", required = false) String token, @PathVariable("username") String username){
+        return ResponseEntity.ok(blogService.getBlogs(token, username));
     }
 
     @GetMapping("/public/blogs/all")
-    ResponseEntity<List<BlogProjection>> getAllBlogs(){
-        return ResponseEntity.ok(blogService.getAllBlogs());
+    ResponseEntity<List<BlogProjection>> getAllBlogs(@RequestHeader(value = "Authorization", required = false) String token){
+        return ResponseEntity.ok(blogService.getAllBlogs(token));
     }
 
     //Add pagination support here.

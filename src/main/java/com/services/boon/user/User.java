@@ -1,5 +1,7 @@
 package com.services.boon.user;
 
+import com.services.boon.blogs.Blog;
+import com.services.boon.events.Event;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +30,10 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
+    @OneToMany
+    private List<Blog> blogs;
+    @OneToMany
+    private List<Event> events;
 
     @Enumerated(EnumType.STRING)
     private Role role;

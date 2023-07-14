@@ -9,10 +9,19 @@ import java.util.List;
 
 public interface BlogRepository extends JpaRepository <Blog, Integer>  {
 
-    @Query("SELECT b.title AS title, b.content AS content, b.createdAt AS createdAt, b.user.firstname AS firstname, b.user.lastname AS lastname FROM Blog b WHERE b.user = :user")
-    List<BlogProjection> findByUser(@Param("user") User user);
+    @Query(value = "select b.id as blogId, b.created_at, b.title, b.content, b.dislikes, b.likes, u.firstname, u.lastname, u.username, e.liked from blog b " +
+            "join _user u on b.user_id = u.id left join (select liked, blog_id from event where user_id = :jwt_user_id) e on b.id = e.blog_id where b.user_id = :user_id ;", nativeQuery = true)
+    List<BlogProjection> AuthUserFindBlogsByUser(@Param("jwt_user_id") Integer JwtUserId, @Param("user_id") Integer userId);
 
-    @Query("SELECT b.title AS title, b.content AS content, b.createdAt AS createdAt, b1.firstname As firstname, b1.lastname As lastname FROM Blog b, User b1 where b.user.id = b1.id")
+    @Query(value = "select b.id as blogId, b.created_at, b.title, b.content, b.dislikes, b.likes, u.firstname, u.lastname, u.username from blog b " +
+            "join _user u on b.user_id = u.id where b.user_id = :user_id ;", nativeQuery = true)
+    List<BlogProjection> findBlogsByUser(@Param("user_id") Integer userId);
+
+    @Query(value = "select b.id as blogId, b.created_at, b.title, b.content, b.dislikes, b.likes, u.firstname, u.lastname, u.username, e.liked from blog b " +
+            "join _user u on b.user_id = u.id left join (select liked, blog_id from event where user_id = :user_id) e on b.id = e.blog_id;\n", nativeQuery = true)
+    List<BlogProjection> AuthUserFindAllBlogs(@Param("user_id") Integer userId);
+
+    @Query(value = "select b.id as blogId, b.created_at, b.title, b.content, b.dislikes, b.likes, u.firstname, u.lastname, u.username from blog b " +
+            "join _user u on b.user_id = u.id;\n", nativeQuery = true)
     List<BlogProjection> findAllBlogs();
-
 }

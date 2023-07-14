@@ -1,5 +1,6 @@
 package com.services.boon.blogs;
 
+import com.services.boon.events.Event;
 import com.services.boon.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -28,6 +30,13 @@ public class Blog {
 
     private String title;
 
+    private Integer likes;
+
+    private Integer dislikes;
+
     @Column(columnDefinition = "text")
     private String content;
+
+    @OneToMany
+    private List<Event> events;
 }
