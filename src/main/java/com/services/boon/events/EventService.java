@@ -35,10 +35,9 @@ public class EventService {
         if(event.isPresent()){
             // update the value.
             Event currentEvent = event.get();
-            currentEvent.setLiked(request.getLiked());
-            if(currentEvent.getLiked() == 0 && request.getLiked() == 1){
+            if((currentEvent.getLiked() == 0 || currentEvent.getLiked() == null) && request.getLiked() == 1){
                 currentBlog.setLikes(currentBlog.getLikes() + 1);
-            } else if(currentEvent.getLiked() == 0 && request.getLiked() == -1){
+            } else if((currentEvent.getLiked() == 0 || currentEvent.getLiked() == null)  && request.getLiked() == -1){
                 currentBlog.setDislikes(currentBlog.getDislikes() + 1);
             } else if(currentEvent.getLiked() == 1 && request.getLiked() == 0){
                 currentBlog.setLikes(currentBlog.getLikes() - 1);
@@ -51,6 +50,7 @@ public class EventService {
             } else if(currentEvent.getLiked() == -1 && request.getLiked() == 0){
                 currentBlog.setDislikes(currentBlog.getDislikes() - 1);
             }
+            currentEvent.setLiked(request.getLiked());
             eventRepository.save(currentEvent);
             blogRepository.save(currentBlog);
             return;
