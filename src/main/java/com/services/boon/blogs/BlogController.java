@@ -29,6 +29,11 @@ public class BlogController {
         return ResponseEntity.ok(blogService.getBlogs(token, username));
     }
 
+    @GetMapping("/public/blogs/blog_id/{blogId}")
+    ResponseEntity<BlogProjection> getBlogById(@RequestHeader(value = "Authorization", required = false) String token, @PathVariable("blogId") Integer blogId){
+        return ResponseEntity.ok(blogService.getBlogById(token, blogId));
+    }
+
     @GetMapping("/public/blogs/all")
     ResponseEntity<List<BlogProjection>> getAllBlogs(@RequestHeader(value = "Authorization", required = false) String token){
         return ResponseEntity.ok(blogService.getAllBlogs(token));

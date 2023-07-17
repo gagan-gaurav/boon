@@ -5,10 +5,7 @@ import com.services.boon.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -61,5 +58,19 @@ public class BlogService {
         }
         List<BlogProjection> blogs = blogRepository.findAllBlogs();
         return blogs;
+    }
+
+    public BlogProjection getBlogById(String token, Integer blogId){
+        var blog = blogRepository.findBlogById(blogId);
+        if(!blog.isPresent()) return null;
+        if(token != null) {
+            String jwt = token.substring(7);
+            var jwtUser = userRepository.findByUsername(jwtService.extractUsername(jwt));
+            if (jwtUser.isPresent()) {
+                BlogProjection authUserGetBlog = blogRepository.AuthUserFindBlogById(jwtUser.get().getId(), blogId).get();
+                return authUserGetBlog;
+            }
+        }
+        return blog.get();
     }
 }
