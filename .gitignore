@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Don't push application profile files.
+/application*.yml
