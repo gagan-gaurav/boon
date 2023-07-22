@@ -30,10 +30,6 @@ public class User implements UserDetails {
     private String lastname;
     private String email;
     private String password;
-    @OneToMany
-    private List<Blog> blogs;
-    @OneToMany
-    private List<Event> events;
 
     @Enumerated(EnumType.STRING)
     private Role role;

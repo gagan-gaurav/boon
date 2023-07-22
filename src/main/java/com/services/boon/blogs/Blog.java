@@ -36,7 +36,4 @@ public class Blog {
 
     @Column(columnDefinition = "text")
     private String content;
-
-    @OneToMany
-    private List<Event> events;
 }
