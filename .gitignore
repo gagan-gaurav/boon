@@ -34,3 +34,6 @@ build/
 
 ### Don't push application profile files.
 **/application*.yml
+
+### Environment variables.
+.env
