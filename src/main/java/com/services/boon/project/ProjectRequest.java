@@ -12,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProjectRequest {
+    private Integer projectId;
     private Boolean showProject;
     private String title;
     private String description;

@@ -51,8 +51,8 @@ public class SecurityConfiguration {
             public void addCorsMappings(CorsRegistry registry) {
                 WebMvcConfigurer.super.addCorsMappings(registry);
                 registry.addMapping("/api/v1/**")
-                        .allowedOrigins("http://localhost:6006", "http://localhost:4200");
-//                        .allowedMethods("GET", "POST", "OPTIONS")
+                        .allowedOrigins("http://localhost:6006", "http://localhost:4200", "http://boon.com.s3-website.ap-south-1.amazonaws.com")
+                        .allowedMethods("GET", "POST", "DELETE", "OPTIONS");
 //                        .allowedHeaders("Origin", "Content-Type", "Accept", "Authorization")
 //                        .allowCredentials(true);
             }

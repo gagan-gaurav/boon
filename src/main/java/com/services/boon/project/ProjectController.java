@@ -23,10 +23,40 @@ public class ProjectController {
 
     @PostMapping("/secured/projects")
     ResponseEntity<Map<String, Object>> addProject(@RequestHeader("Authorization") String token, @RequestBody ProjectRequest request) {
-        projectService.createProject(token, request);
         Map<String, Object> response = new HashMap<>();
-        response.put("message", "Project is added to the database");
-        response.put("status", "success");
+        if(projectService.createProject(token, request)) {
+            response.put("message", "Project is created successfully.");
+            response.put("status", "success");
+        }else {
+            response.put("message", "user or project not found.");
+            response.put("status", "fail");
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/secured/projects/{project_id}")
+    ResponseEntity<Map<String, Object>> updateProject(@RequestHeader("Authorization") String token, @PathVariable("project_id") Integer projectId, @RequestBody ProjectRequest request) {
+        Map<String, Object> response = new HashMap<>();
+        if(projectService.updateProject(token, projectId, request)) {
+            response.put("message", "Project is updated successfully.");
+            response.put("status", "success");
+        }else {
+            response.put("message", "user or project not found.");
+            response.put("status", "fail");
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/secured/projects/delete/{project_id}")
+    ResponseEntity<Map<String, Object>> deleteProject(@RequestHeader("Authorization") String token, @PathVariable("project_id") Integer projectId) {
+        Map<String, Object> response = new HashMap<>();
+        if(projectService.deleteProject(token, projectId)) {
+            response.put("message", "Project is removed successfully.");
+            response.put("status", "success");
+        }else {
+            response.put("message", "user or project not found.");
+            response.put("status", "fail");
+        }
         return ResponseEntity.ok(response);
     }
 }
