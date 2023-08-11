@@ -9,10 +9,11 @@ import java.util.Optional;
 
 public interface ProfileRepository extends JpaRepository <Profile, Integer> {
 
-    @Query("SELECT p.description AS description, p.resume AS resume, p.showResume AS showResume, p.github AS github, p.showGithub AS showGithub," +
-            "p.linkedin AS linkedin, p.showLinkedin AS showLinkedin, p.gmail AS gmail, p.showGmail AS showGmail, p.user.username as username," +
-            "p.user.firstname AS firstname, p.user.lastname AS lastname FROM Profile p WHERE p.user = :user")
-    Optional<ProfileProjection> findByUserCustom(@Param("user") User user);
+    @Query(value = "SELECT u.username AS username, u.firstname AS firstname, u.lastname as lastname, p.description AS description," +
+            "p.resume AS resume, p.show_resume AS showResume, p.linkedin AS linkedin, p.show_linkedin as showLinkedin, " +
+            "p.github AS github, p.show_github AS showGithub, p.gmail AS gmail, p.show_gmail AS showGmail, " +
+            "p.profile_url AS ProfileUrl, p.profile_pic AS ProfilePic FROM profile p JOIN _user u ON p.user_id = u.id WHERE u.username = :user", nativeQuery = true)
+    Optional<ProfileProjection> findByUsername(@Param("user") String user);
 
     Optional<Profile> findByUser(User user);
 }

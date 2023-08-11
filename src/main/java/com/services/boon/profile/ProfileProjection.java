@@ -13,4 +13,6 @@ public interface ProfileProjection {
     Boolean getShowGithub();
     String getGmail();
     Boolean getShowGmail();
+    String getProfileUrl();
+    Boolean getProfilePic();
 }

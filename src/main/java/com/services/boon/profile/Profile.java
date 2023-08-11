@@ -32,4 +32,6 @@ public class Profile {
     private Boolean showGithub;
     private String gmail;
     private Boolean showGmail;
+    private String profileUrl;
+    private Boolean profilePic;
 }

@@ -4,8 +4,17 @@ import com.services.boon.config.JwtService;
 import com.services.boon.user.User;
 import com.services.boon.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Optional;
 
 @Service
@@ -16,9 +25,11 @@ public class ProfileService {
     private final JwtService jwtService;
 
     public ProfileProjection getUserProfile(String username){
-        var user = userRepository.findByUsername(username).get();
-        var profile = profileRepository.findByUserCustom(user);
-        if(profile.isPresent()) return profile.get();
+        var user = userRepository.findByUsername(username);
+        if(user.isPresent()){
+            var profile = profileRepository.findByUsername(user.get().getUsername());
+            return profile.get();
+        }
         return null;
     }
 
@@ -55,5 +66,45 @@ public class ProfileService {
                 .build();
 
         profileRepository.save(newProfile);
+    }
+
+    public void setProfileImage(String token, byte[] imageData){
+        String jwt = token.substring(7);
+        var username = jwtService.extractUsername(jwt);
+
+        if(imageData == null) {
+            var profile = profileRepository.findByUser(userRepository.findByUsername(username).get()).get();
+            profile.setProfileUrl(null);
+            profile.setProfilePic(false);
+            profileRepository.save(profile);
+            return;
+        }
+        String dim = "156";
+        String targetUrl = "https://t1ufofmm90.execute-api.ap-south-1.amazonaws.com/default/imageUploader?filename=profileImage/" + username + "&h=" + dim + "&w=" + dim;
+
+        WebClient webClient = WebClient.builder().baseUrl(targetUrl).build();
+
+        Mono<ImageUploaderServiceResponse> responseMono = webClient.post()
+                .uri("/")
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(BodyInserters.fromValue(imageData))
+                .retrieve()
+                .bodyToMono(ImageUploaderServiceResponse.class);
+
+        responseMono.subscribe(
+                result -> {
+                    // Handle the response here if needed
+                    System.out.println(result.getMessage());
+//                    System.out.println(result.getUrl());
+                    var profile = profileRepository.findByUser(userRepository.findByUsername(username).get()).get();
+                    profile.setProfileUrl(result.getUrl());
+                    profile.setProfilePic(true);
+                    profileRepository.save(profile);
+                },
+                error -> {
+                    System.err.println("An error occurred: " + error.getMessage());
+                }
+        );
+
     }
 }
