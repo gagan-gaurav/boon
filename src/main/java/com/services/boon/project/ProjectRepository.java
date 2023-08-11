@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface ProjectRepository extends JpaRepository <Project, Integer> {
 
     @Query(value = "SELECT p.id AS projectId, p.show_project AS showProject, p.title AS title, p.description AS description, p.start_date AS startDate, p.end_date AS endDate, " +
-            "p.content AS content, u.username AS username, u.firstname AS firstname, u.lastname AS lastname FROM project p JOIN _user u on p.user_id = u.id WHERE u.id = :user_id", nativeQuery = true)
+            "p.content AS content, u.username AS username, u.firstname AS firstname, u.lastname AS lastname FROM project p JOIN _user u on p.user_id = u.id WHERE u.id = :user_id ORDER BY p.end_date", nativeQuery = true)
     Optional<List<ProjectProjection>> findByUser(@Param("user_id") Integer userId);
 
 }
