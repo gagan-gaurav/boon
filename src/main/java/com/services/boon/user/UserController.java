@@ -29,7 +29,7 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         response.put("username", username);
         response.put("status", "loggedIn");
-        if(profile.getProfilePic() == true){
+        if(profile.getProfilePic() != null && profile.getProfilePic() == true){
             response.put("profileImageUrl", profile.getProfileUrl());
         }else response.put("profileImageUrl", null);
         return ResponseEntity.ok(response);
